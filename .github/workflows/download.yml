@@ -15,12 +15,12 @@ jobs:
       
       - name: Download the file
         run: |
-          wget -O "my-downloaded-file" "${{ vars.DOWNLOAD_URL }}"
+          wget -O "my-downloaded-file2" "${{ vars.DOWNLOAD_URL }}"
       
       - name: Commit and push the file
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add my-downloaded-file
+          git add my-downloaded-file2
           git commit -m "Add downloaded file from workflow" || echo "No changes to commit"
           git push
