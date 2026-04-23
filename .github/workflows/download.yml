@@ -1,17 +1,26 @@
-name: Download File to Artifact
+name: Download and Commit to Repo
 
 on:
-  workflow_dispatch:  # Lets you manually trigger the download
+  workflow_dispatch:
 
 jobs:
-  download:
+  download-and-commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Needed to push to your repository
+    
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
       - name: Download the file
-        run: wget -O downloaded-file "${{ vars.DOWNLOAD_URL }}"
-        
-      - name: Upload as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: my-downloaded-file
-          path: downloaded-file
+        run: |
+          wget -O "my-downloaded-file" "${{ vars.DOWNLOAD_URL }}"
+      
+      - name: Commit and push the file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add my-downloaded-file
+          git commit -m "Add downloaded file from workflow" || echo "No changes to commit"
+          git push
