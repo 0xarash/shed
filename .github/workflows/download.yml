@@ -1,0 +1,17 @@
+name: Download File to Artifact
+
+on:
+  workflow_dispatch:  # Lets you manually trigger the download
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download the file
+        run: wget -O downloaded-file "${{ vars.DOWNLOAD_URL }}"
+        
+      - name: Upload as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-downloaded-file
+          path: downloaded-file
