@@ -2,7 +2,17 @@ name: simple downloader
 
 on:
   workflow_dispatch:
-
+    inputs:
+      downlaod_link:
+        description: 'Download Link URL'
+        required: true
+        type: string
+      filename:
+        description: 'Filename'
+        required: false
+        type: string
+        default: 'file'
+        
 jobs:
   download-and-commit:
     runs-on: ubuntu-latest
@@ -15,12 +25,12 @@ jobs:
       
       - name: Download the file
         run: |
-          wget -O "file" "${{ vars.DOWNLOAD_URL }}"
+          wget -O "${{ inputs.filename }}" "${{ inputs.downlaod_link }}"
       
       - name: Commit and push the file
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add file
+          git add "${{ inputs.filename }}"
           git commit -m "Add downloaded file from workflow" || echo "No changes to commit"
           git push
